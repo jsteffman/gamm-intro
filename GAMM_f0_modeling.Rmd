@@ -48,7 +48,7 @@ This introduction is aimed at outlining the basics of GAM(M) modeling and applyi
 ### How to use this
 If you want to just read this document you will get an introduction to GAM(M)s and an example of their application in intonation research. 
 
-If you want to get more hands on, you can access the corresponding data and RMarkdown document to experiment with the code, and fit your own models with the data. 
+If you want to get more hands on, you can access the corresponding data and RMarkdown document to experiment with the code, and fit your own models with the data. You can find this here: https://github.com/jsteffman/gamm-intro
 
 This is intended to be a mostly conceptual introduction- it glosses over more than a few details. 
 
