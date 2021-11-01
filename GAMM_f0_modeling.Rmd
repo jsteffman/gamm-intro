@@ -6,7 +6,7 @@ output:
   html_document: 
       toc: true
       toc_float: true
-      toc_depth: 3
+      toc_depth: 2
   pdf_document: default
   
 bibliography: ref.bib
@@ -43,24 +43,24 @@ theme_set(theme_bw(base_size = 13))
 
 ## Introduction
 
-This introduction is aimed at outlining the basics of GAM(M) modeling and applying them to modeling intonational tunes in American English. It draws heavily on previous tutorials and introductions, particularly @soskuthy2017generalised. I assume some basic familiarity with linear models. Familiarity with R is a plus for reading this document, as some code snippets are included, but probably not needed. 
+This introduction is aimed at outlining the basics of GAM(M) modeling and applying them to modeling intonational tunes in American English. It draws heavily on previous tutorials and introductions, particularly @soskuthy2017generalised. I assume some basic familiarity with linear models. Familiarity with R is a plus for reading this document, but probably not needed. 
 
-### How to use this
+### How to use this document
 If you want to just read this document you will get an introduction to GAM(M)s and an example of their application in intonation research. 
 
-If you want to get more hands on, you can access the corresponding data and RMarkdown document to experiment with the code, and fit your own models with the data. You can find this [here](https://github.com/jsteffman/gamm-intro). 
+If you want to get more hands on, you can access the corresponding data and RMarkdown document to experiment with the code, and fit your own models with the data. You can find this here: https://github.com/jsteffman/gamm-intro
 
-This is intended to be a mostly conceptual introduction - 
+This is intended to be a mostly conceptual introduction- it glosses over more than a few details. 
 
 * For much more in-depth descriptions of GAM(M)s see, e.g. @soskuthy2021evaluating, @wood2017generalized
 
-* The document also includes notes for <span style="color: purple;">further reading</span> where relevant. 
+* The document includes notes for <span style="color: purple;">further reading</span> where relevant. 
 
 ## The data  
 
 The data come from an imitative speech paradigm in which speakers heard model utterance such as "Her name is Marilyn", with f0 resynthesized to create various tunes. Speakers reproduced what they heard on a new sentence such as "They honored Melanie", effectively transposing the tune. 
 
-We are interested on the intonational tune in the final stress-initial word, like "Marilyn" which was modeled on 8 different resynthesized f0 contours - all combinations of H and L mono-tonal pitch accents, phrase accents, and boundary tones in MAE ToBI [@beckman1997guidelines]. We call this the "Nuclear Tune". The model tunes, with 5 schematic target heights are shown below, as well as the data we'll use in this tutorial, which comes from 5 speakers.
+We are interested on the intonational tune in the final stress-initial word, like "Marilyn" which was modeled on 8 different resynthesized f0 contours - all combinations of H and L mono-tonal pitch accents, phrase accents, and boundary tones in MAE ToBI [@beckman1997guidelines]. We call this the "Nuclear Tune". The model tunes, with 5 schematic target heights are shown below, as well as the data we'll use in this tutorial, which comes from 5 speakers. 
 
 ```{r,echo=FALSE,fig.height = 4, fig.width = 9.5}
 plot_grid(
@@ -344,8 +344,6 @@ ggplot(data_means[data_means$tune=="HLH",],aes(x=prop_dur,y=erbc_mean))+
 
 ```
 
-We can see that by summing the lines in panel C and intercept, we have thus arrived at the model's fit to the data. 
-
 A GAM can be fit with many types of basis functions, for comparison let's fit a GAM with ``` bs="cr" ``` for "cubic regression" splines:
 
 
@@ -430,7 +428,7 @@ In my experience, the basis functions one can employ in ```mgcv``` don't drastic
 
 ### 2. Knots 
 
-Now that we've covered the basis functions, let's turn to the other parameter we set when fitting the models, namely ```k=10```. k stands for "knots", which determines the number of basis functions we employ (9 in the examples above). Now let's look at ```k=6```. 
+Now that we've covered the basis functions, let's turn to the other parameter we set when fitting the models , namely ```k=10```. k stands for "knots", which determines the number of basis functions we employ (9 in the examples above). Now let's look at ```k=6```. 
 
 ```{r,echo=FALSE,message=FALSE,fig.height = 3, fig.width = 6}
 
@@ -455,7 +453,7 @@ For cubic regression splines, knots define piece-wise cubic  functions that cont
 
 * <span style="color: purple;"> Further reading: @wood2003thin for a math-heavy introduction to thin plate regression splines and discussion of knot construction. </span>
 
-Let's look at two types of basis functions, with different numbers of knots, fit to the HLH trajectory. The labels for each row indicate both the basis funciton cr/tp and the knot number. 
+Let's look at two types of basis functions in different number fit to the HLH trajectory. 
 
 
 
@@ -573,13 +571,13 @@ nrow=1),
 plot_grid(
 ggplot(data_means[data_means$tune=="HLH",],aes(x=prop_dur,y=erbc_mean))+
   geom_line(data=model_matrix_tp_5[model_matrix_tp_5$index!="e",],aes(x=prop_dur,y=basis,color=index),size=1)+ylab("")+xlab("")+
-   ylim(-2.7,2.7)+
+   ylim(-2.6,2.6)+
   ggtitle("bs = tp, k = 5")+
   theme(legend.position = "none"),
 
 ggplot(data_means[data_means$tune=="HLH",],aes(x=prop_dur,y=erbc_mean))+
   geom_line(data=model_matrix_tp_5[model_matrix_tp_5$index!="e",],aes(x=prop_dur,y=coeff_basis,color=index),size=1)+
-  ylim(-2.7,2.7)+
+  ylim(-2.6,2.6)+
   ylab("")+xlab("")+
   ggtitle("")+
   theme(legend.position = "none"),
@@ -590,7 +588,7 @@ ggplot(data_means[data_means$tune=="HLH",],aes(x=prop_dur,y=erbc_mean))+
   geom_hline(yintercept =-0.33915039,size=1,lty=2)+
   ylab("")+xlab("")+
   theme(legend.position = "none")+
-    ylim(-2.7,2.7)+
+    ylim(-2.6,2.6)+
    ggtitle("")+
   stat_summary(fun=mean,geom="point",color="black",pch=1,size=3),
 
@@ -722,7 +720,7 @@ There is no hard and fast rule for choosing the right number of knots, and the n
 
 ### 3. Scaling things up
 
-In the preceding toy examples, we are fitting a single trajectory, that is, one single time series measurement of f0. However, everything we just saw applies when we scale up to modeling, say, all of the LHH contours in the data set, as in:
+In the preceding toy examples, we are fitting a single trajectory, that is, one time series of f0. However, everything we just saw applies when we scale up to modeling, say, all of the LHH contours in the data set, as in:
 
 ```{r,echo =F, fig.height = 3.5, fig.width = 5}
 ggplot(data[data$tune=="LHH",],aes(x=prop_dur,group=speaker_trial,y=erbc))+
@@ -737,7 +735,7 @@ gam_tp_10_LHH<-bam(erbc~s(prop_dur,bs="tp",k=10),
 ```
 
 
-Let's look at the fit in the same way as with the single-trjacetory models: here you can see the same principles we examined for a single trajectory apply to the fit to all of the trajectories here. 
+Let's look at the fit in the same way as with the single-trjacetory models: 
 
 ```{r,echo=FALSE,message=FALSE,fig.height = 3.5, fig.width = 9.5}
 tp_10_LHH_fit<-as.data.frame(cbind(gam_tp_10_LHH$fitted.values,1:30/30))
@@ -791,12 +789,11 @@ ggplot(data[data$tune=="LHH",],aes(x=prop_dur,y=erbc))+
 ```
 
 
-## Comparing tunes, random effects, and error models
+## Comparing tunes, adding random effects, and error models
 
-So far we've just fit to a single tune's trajectory, allowing us to characterize its shape. However, usually, we want to characterize how tunes differ from one another. 
+So far we've just fit GAMMs to a single tune's trajectory, allowing us to characterize its shape. 
 
-The remainder of this tutorial will walk through this, comparing just two tunes: HHH and HHL, the "high rising" tunes. 
-
+What if we want to compare tunes to one another? The remainder of this tutorial will walk through this, comparing just two tunes: HHH and HHL, the "high rising" tunes. 
 
 ```{r,echo =T}
 
@@ -814,7 +811,6 @@ ggplot(HR,aes(x=prop_dur,y=erbc,group=speaker_trial,color=tune))+
 
 ```
 
-### 1. Comparing tune shapes
 
 To begin let's fit a simple model that includes each tune. You'll see that the model code is a bit different.
 
@@ -874,7 +870,7 @@ Because each smooth fit also includes CI, we can make some principled comparison
    
 However before we do this, we are missing one crucial component: random effects. 
 
-### 2. Adding Random effects
+### Adding Random effects
 
 There are various ways of specifying random effect structures in GAMMs. Here I will present just one, which is discussed in @soskuthy2021evaluating: so-called *random smooths* which are constructed to be analogous to random intercepts for speaker and slopes for tune in a linear model. 
 
@@ -914,7 +910,7 @@ Here we can see that the addition of random smooths has added more uncertainty a
 
 * <span style="color: purple;"> Further reading: @soskuthy2017generalised and  @soskuthy2021evaluating for descriptions of random effects in GAMMs and random effects more generally.</span>
   
-### 3. Adding an AR1 error model
+### Adding an AR1 error model
 
 One potential issue that GAMMs can have is, like linear models, auto-correlated residuals.
 
@@ -951,7 +947,7 @@ gam_HR_random_AR1<- bam(erbc ~ tune +
              data=HR)
 ```
 
-By plotting the residuals like before we can see that the AR1 model does a much better job of dealing with auto-correlated residuals. 
+By plotting the residuals like before we can see that the model fit is overall pretty similar to the non-AR1 variant of the model 
 
 ```{r, echo=TRUE,fig.height = 4, fig.width = 5}
 acf_resid(gam_HR_random_AR1)
@@ -1040,11 +1036,11 @@ In this sense, the GAMM has let us say something interesting about how speakers 
 
 ## Further exercises 
 
-Here are some things you can do to extend what was covered above, using the RMarkdown code. 
+Here are some things you can do to extend what was covered above. 
 
 * Fit a new model comparing two different tunes, say LHL and LLH, or two of your choosing, and characterize how they are different from one another. 
 
-* Compare autocorrelation from this new model that you make to one which includes an AR1 error model. 
+* Compare autocorrelation from this new model that you make to one which includes and AR1 error model. 
 
 * Fit a new model with *all* of the tunes, and then examine pairwise comparisons of interest. 
 
