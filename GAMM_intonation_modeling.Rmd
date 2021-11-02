@@ -2,6 +2,7 @@
 title: 'Modeling intonational tunes with Generalized Additive Mixed Models: A Brief
   Introduction'
 author: "Jeremy Steffman"
+date: " last updated `r format(Sys.time(), '%B, %Y')`"
 output:
   html_document: 
       toc: true
@@ -739,7 +740,7 @@ gam_tp_10_LHH<-bam(erbc~s(prop_dur,bs="tp",k=10),
 
 Let's look at the fit in the same way as with the single-trjacetory models: here you can see the same principles we examined for a single trajectory apply to the fit to all of the trajectories here. 
 
-```{r,echo=FALSE,message=FALSE,fig.height = 3.5, fig.width = 9.5}
+```{r,echo=FALSE,message=FALSE,fig.height = 3, fig.width = 9.5}
 tp_10_LHH_fit<-as.data.frame(cbind(gam_tp_10_LHH$fitted.values,1:30/30))
 
 
@@ -765,14 +766,14 @@ model_matrix_tp_10_LHH %>% mutate(coeff_basis=basis*coeff)->model_matrix_tp_10_L
 plot_grid(
 ggplot(data[data$tune=="LHH",],aes(x=prop_dur,y=erbc_mean))+
   geom_line(data=model_matrix_tp_10_LHH[model_matrix_tp_10_LHH$index!="j",],aes(x=prop_dur,y=basis,color=index),size=1)+ylab("")+xlab("")+
-  ylim(-3,3)+
+  ylim(-2,2)+
   ggtitle("basis functions")+
   theme(legend.position = "none"),
 
 
 ggplot(data[data$tune=="LHH",],aes(x=prop_dur,y=erbc_mean))+
   geom_line(data=model_matrix_tp_10_LHH[model_matrix_tp_10_LHH$index!="j",],aes(x=prop_dur,y=coeff_basis,color=index),size=1)+
-    ylim(-3,3)+
+    ylim(-2,2)+
   ylab("")+xlab("")+
   ggtitle("multiplied by βs")+
   theme(legend.position = "none"),
@@ -781,7 +782,7 @@ ggplot(data[data$tune=="LHH",],aes(x=prop_dur,y=erbc))+
     geom_line(alpha=0.1,size=1.5,aes(group=speaker_trial))+ 
   geom_line(data=model_matrix_tp_10_LHH[model_matrix_tp_10_LHH$index!="j",],aes(x=prop_dur,y=coeff_basis,color=index),size=1)+
   geom_hline(yintercept =0.0779,size=1,lty=2)+
-  coord_cartesian(ylim=c(-3,3))+
+  coord_cartesian(ylim=c(-2,2))+
   ylab("")+xlab("")+
    geom_line(data=tp_10_LHH_fit,aes(y=V1,x=V2),color="blue",size=3)+
   theme(legend.position = "none")+
