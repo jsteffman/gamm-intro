@@ -1,6 +1,6 @@
 ---
-title: 'Modeling intonational tunes with Generalized Additive Mixed Models: A Brief
-  Introduction'
+title: 'Modeling intonational tunes with Generalized Additive Mixed Models: A practical
+  introduction'
 author: "Jeremy Steffman"
 date: " last updated `r format(Sys.time(), '%B, %Y')`"
 output:
@@ -51,15 +51,15 @@ If you want to just read this document you will get an introduction to GAM(M)s a
 
 If you want to get more hands on, you can access the corresponding data and RMarkdown document to experiment with the code, and fit your own models with the data. You can find this [here](https://github.com/jsteffman/gamm-intro). 
 
-This is intended to be a mostly conceptual introduction - 
+This is intended to be a mostly conceptual introduction -
 
-* For much more in-depth descriptions of GAM(M)s see, e.g. @soskuthy2021evaluating, @wood2017generalized
+* For more in-depth descriptions of GAM(M)s see, e.g. @soskuthy2021evaluating and @wood2017generalized. 
 
 * The document also includes notes for <span style="color: purple;">further reading</span> where relevant. 
 
 ## The data  
 
-The data come from an imitative speech paradigm in which speakers heard model utterance such as "Her name is Marilyn", with f0 resynthesized to create various tunes. Speakers reproduced what they heard on a new sentence such as "They honored Melanie", effectively transposing the tune. 
+The data we will use comes from an imitative speech paradigm in which speakers listened to model utterances such as "Her name is Marilyn", with f0 resynthesized to create various intonational tunes. Speakers reproduced what they heard on a new sentence such as "They honored Melanie", effectively transposing the tune. 
 
 We are interested on the intonational tune in the final stress-initial word, like "Marilyn" which was modeled on 8 different resynthesized f0 contours - all combinations of H and L mono-tonal pitch accents, phrase accents, and boundary tones in MAE ToBI [@beckman1997guidelines]. We call this the "Nuclear Tune". The model tunes, with 5 schematic target heights are shown below, as well as the data we'll use in this tutorial, which comes from 5 speakers.
 
@@ -710,11 +710,11 @@ ggplot(data_means[data_means$tune=="LHH"|data_means$tune=="HLH",],aes(x=prop_dur
   xlab("prop. word duration")+ylab("centered ERB")+facet_wrap(~tune,nrow=2), align="hv",nrow=1)
 ```
 
-In practice, setting a very high number of knots is not a good idea because its computationally intensive, and can sometimes lead to over-fitting. 
+In practice, setting a very high number of knots is not necessarily a good idea because it is computationally intensive, and can sometimes lead to over-fitting. 
 
 There is no hard and fast rule for choosing the right number of knots, and the number you select should be informed by how "wiggly" you expect your data to be. 
 
- In my experience 10 knots is a good amount for modeling trajectories of the sort we see in intonational tunes. The package ```mgcv``` comes with useful ways to check that the number of knots you are setting is appropriate.
+ In my experience 10 knots is a good amount for modeling trajectories of the sort we see in intonational tunes over a multi-syllable word. The package ```mgcv``` comes with useful ways to check that the number of knots you are setting is appropriate.
 
 * This can be done with the ```gam.check()``` and ```check.k()``` functions in ```mgcv```. 
 
@@ -966,11 +966,11 @@ plot_smooth(gam_HR_random_AR1, view = "prop_dur", plot_all = "tune",rm.ranef=T)
 
 ## Visual inspection for significance
 
-There are various ways to do significance testing in GAMMs, and the appropriate one may very depending on your question. These include: 
+There are various ways to do significance testing in GAMMs, and the appropriate one may vary depending on your question. These include: 
 
 * Inspecting coefficients that model differences explicitly (not possible with the way we fit our model)
 * Model comparison 
-* Visual inspection of fits, differences and CI. 
+* Visual inspection of fits, difference smooths and CI. 
 
 Given that here we are interested in characterizing how the shapes of the contours differ from one another, a straightforward test of significance can come from visual inspection of smooth differences: so-called difference smooths. 
 
